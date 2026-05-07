@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, BadgeCheck, ShieldCheck, Truck } from "lucide-react";
+import { ArrowLeft, BadgeCheck, ShieldCheck, ShoppingBag, Truck } from "lucide-react";
 import { Header } from "@/components/storefront/Header";
 import { Footer } from "@/components/storefront/Footer";
 import { formatPrice, getProduct, products } from "@/lib/products";
@@ -16,12 +16,9 @@ export const Route = createFileRoute("/product/$slug")({
       { title: `${loaderData?.product.name} — Thato's Storefront` },
       {
         name: "description",
-        content: `${loaderData?.product.name} ${loaderData?.product.colorway}. Authenticated by Thato. Live ask & bid.`,
+        content: `${loaderData?.product.name} ${loaderData?.product.colorway}. Authenticated by Thato. Shipped worldwide.`,
       },
-      {
-        property: "og:image",
-        content: loaderData?.product.image ?? "",
-      },
+      { property: "og:image", content: loaderData?.product.image ?? "" },
     ],
   }),
   notFoundComponent: () => (
@@ -52,7 +49,7 @@ const SIZES = ["7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "
 function ProductPage() {
   const { product } = Route.useLoaderData();
   const [size, setSize] = useState<string | null>(null);
-  const [mode, setMode] = useState<"buy" | "bid">("buy");
+  const lowStock = product.inStock <= 5;
 
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 4);
 
@@ -105,10 +102,23 @@ function ProductPage() {
             <div className="mt-1 text-muted-foreground">{product.colorway}</div>
           </div>
 
-          <div className="grid grid-cols-3 gap-px overflow-hidden rounded-sm border border-border bg-border">
-            <Stat label="Last Sale" value={formatPrice(product.lastSale)} />
-            <Stat label="Lowest Ask" value={formatPrice(product.lowestAsk)} accent />
-            <Stat label="Highest Bid" value={formatPrice(product.highestBid)} />
+          <div className="flex items-end gap-4 border-y border-border py-5">
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                Price
+              </div>
+              <div className="font-display text-4xl font-bold text-primary">
+                {formatPrice(product.price)}
+              </div>
+            </div>
+            <div className="ml-auto text-right">
+              <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                Availability
+              </div>
+              <div className={`font-mono text-sm ${lowStock ? "text-destructive" : "text-foreground"}`}>
+                {lowStock ? `Only ${product.inStock} left` : `In stock · ${product.inStock} pairs`}
+              </div>
+            </div>
           </div>
 
           <div>
@@ -133,39 +143,22 @@ function ProductPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-px rounded-sm border border-border bg-border p-px">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto]">
             <button
-              onClick={() => setMode("buy")}
-              className={`rounded-sm py-3 text-sm font-medium transition ${
-                mode === "buy"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-card text-muted-foreground hover:text-foreground"
-              }`}
+              disabled={!size}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-primary py-4 text-sm font-semibold uppercase tracking-[0.18em] text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Buy now · {formatPrice(product.lowestAsk)}
+              <ShoppingBag className="h-4 w-4" />
+              {size ? `Add to bag — Size ${size}` : "Select a size"}
             </button>
-            <button
-              onClick={() => setMode("bid")}
-              className={`rounded-sm py-3 text-sm font-medium transition ${
-                mode === "bid"
-                  ? "bg-foreground text-background"
-                  : "bg-card text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Place bid · from {formatPrice(product.highestBid)}
+            <button className="rounded-sm border border-border-strong bg-surface px-5 py-4 text-sm font-medium hover:border-primary">
+              ♡ Save
             </button>
           </div>
 
-          <button
-            disabled={!size}
-            className="w-full rounded-sm bg-primary py-4 text-sm font-semibold uppercase tracking-[0.18em] text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            {size ? `${mode === "buy" ? "Buy" : "Bid"} — Size ${size}` : "Select a size"}
-          </button>
-
           <div className="grid grid-cols-3 gap-3 text-xs">
             <Trust icon={ShieldCheck} label="Authenticated" />
-            <Trust icon={BadgeCheck} label="Verified seller" />
+            <Trust icon={BadgeCheck} label="Fixed price" />
             <Trust icon={Truck} label="Ships worldwide" />
           </div>
 
@@ -173,16 +166,16 @@ function ProductPage() {
             <div className="mb-2 text-[11px] uppercase tracking-[0.2em] text-foreground">
               Product details
             </div>
-            Released {product.releaseYear} · Retail {formatPrice(product.retail)} ·
-            Trading at <span className="text-primary">+{product.premiumPct}%</span> over
-            retail. A staple of the {product.brand} lineup, this {product.colorway}{" "}
-            colorway has remained one of the most-asked pairs on Thato's storefront.
+            Released {product.releaseYear} · Original retail {formatPrice(product.retail)}.
+            A staple of the {product.brand} lineup, this {product.colorway} colorway is
+            one of Thato's hand-picked favourites — sourced fresh, inspected end-to-end,
+            and shipped ready to wear.
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-[1400px] border-t border-border px-4 py-12">
-        <h2 className="mb-6 font-display text-2xl font-bold">More from the market</h2>
+        <h2 className="mb-6 font-display text-2xl font-bold">You might also like</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {related.map((p) => (
             <Link
@@ -199,7 +192,7 @@ function ProductPage() {
               />
               <div className="p-3">
                 <div className="truncate text-sm">{p.name}</div>
-                <div className="text-xs text-primary">{formatPrice(p.lowestAsk)}</div>
+                <div className="text-xs text-primary">{formatPrice(p.price)}</div>
               </div>
             </Link>
           ))}
@@ -207,23 +200,6 @@ function ProductPage() {
       </section>
 
       <Footer />
-    </div>
-  );
-}
-
-function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
-  return (
-    <div className="bg-card p-4">
-      <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-        {label}
-      </div>
-      <div
-        className={`mt-1 font-display text-xl font-semibold ${
-          accent ? "text-primary" : ""
-        }`}
-      >
-        {value}
-      </div>
     </div>
   );
 }

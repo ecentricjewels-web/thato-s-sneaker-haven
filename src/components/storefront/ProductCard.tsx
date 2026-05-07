@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { TrendingDown, TrendingUp } from "lucide-react";
+import { Flame, Sparkles } from "lucide-react";
 import { formatPrice, type Product } from "@/lib/products";
 
 export function ProductCard({ product }: { product: Product }) {
-  const up = product.changePct >= 0;
+  const lowStock = product.inStock <= 5;
   return (
     <Link
       to="/product/$slug"
@@ -22,15 +22,16 @@ export function ProductCard({ product }: { product: Product }) {
         <span className="absolute left-3 top-3 rounded-sm bg-background/80 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground backdrop-blur">
           {product.brand}
         </span>
-        <span
-          className={`absolute right-3 top-3 inline-flex items-center gap-1 rounded-sm px-2 py-1 text-[10px] font-medium ${
-            up ? "bg-primary/15 text-primary" : "bg-destructive/15 text-destructive"
-          }`}
-        >
-          {up ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-          {up ? "+" : ""}
-          {product.changePct.toFixed(1)}%
-        </span>
+        {product.isHot && (
+          <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-sm bg-destructive/15 px-2 py-1 text-[10px] font-medium text-destructive">
+            <Flame className="h-3 w-3" /> Hot
+          </span>
+        )}
+        {product.isNew && !product.isHot && (
+          <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-sm bg-primary/15 px-2 py-1 text-[10px] font-medium text-primary">
+            <Sparkles className="h-3 w-3" /> New
+          </span>
+        )}
       </div>
       <div className="flex flex-1 flex-col gap-3 p-4">
         <div>
@@ -42,18 +43,18 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="mt-auto flex items-end justify-between border-t border-border pt-3">
           <div>
             <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-              Lowest Ask
+              Price
             </div>
             <div className="font-display text-lg font-semibold">
-              {formatPrice(product.lowestAsk)}
+              {formatPrice(product.price)}
             </div>
           </div>
           <div className="text-right">
             <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-              Last Sale
+              Stock
             </div>
-            <div className="font-mono text-sm text-foreground/80">
-              {formatPrice(product.lastSale)}
+            <div className={`font-mono text-sm ${lowStock ? "text-destructive" : "text-foreground/80"}`}>
+              {lowStock ? `Only ${product.inStock} left` : `${product.inStock} pairs`}
             </div>
           </div>
         </div>
