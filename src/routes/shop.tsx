@@ -91,8 +91,8 @@ function Shop() {
               onChange={(e) => setSort(e.target.value as typeof sort)}
               className="rounded-sm border border-border bg-surface px-3 py-1.5 text-sm focus:border-primary focus:outline-none"
             >
-              <option value="trending">Trending</option>
-              <option value="movers">Top movers</option>
+              <option value="featured">Featured</option>
+              <option value="newest">Newest</option>
               <option value="price-asc">Price: low to high</option>
               <option value="price-desc">Price: high to low</option>
             </select>
