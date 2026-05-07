@@ -28,8 +28,8 @@ export const Route = createFileRoute("/shop")({
 function Shop() {
   const { brand: initial } = Route.useSearch();
   const [brand, setBrand] = useState<Brand | "All">(initial ?? "All");
-  const [sort, setSort] = useState<"trending" | "price-asc" | "price-desc" | "movers">(
-    "trending",
+  const [sort, setSort] = useState<"featured" | "price-asc" | "price-desc" | "newest">(
+    "featured",
   );
 
   const filtered = useMemo(() => {
@@ -37,13 +37,13 @@ function Shop() {
     list = [...list];
     switch (sort) {
       case "price-asc":
-        list.sort((a, b) => a.lowestAsk - b.lowestAsk);
+        list.sort((a, b) => a.price - b.price);
         break;
       case "price-desc":
-        list.sort((a, b) => b.lowestAsk - a.lowestAsk);
+        list.sort((a, b) => b.price - a.price);
         break;
-      case "movers":
-        list.sort((a, b) => b.changePct - a.changePct);
+      case "newest":
+        list.sort((a, b) => b.releaseYear - a.releaseYear);
         break;
     }
     return list;
@@ -91,8 +91,8 @@ function Shop() {
               onChange={(e) => setSort(e.target.value as typeof sort)}
               className="rounded-sm border border-border bg-surface px-3 py-1.5 text-sm focus:border-primary focus:outline-none"
             >
-              <option value="trending">Trending</option>
-              <option value="movers">Top movers</option>
+              <option value="featured">Featured</option>
+              <option value="newest">Newest</option>
               <option value="price-asc">Price: low to high</option>
               <option value="price-desc">Price: high to low</option>
             </select>

@@ -9,11 +9,11 @@ import heroImg from "@/assets/hero-sneaker.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Thato's Storefront — Authenticated Sneakers Marketplace" },
+      { title: "Thato's Storefront — Authenticated Sneakers" },
       {
         name: "description",
         content:
-          "Shop authenticated Nike, Jordan, Adidas and Puma at live market prices. Curated by Thato.",
+          "Shop authenticated Nike, Jordan, Adidas and Puma at fixed prices. Curated by Thato.",
       },
     ],
   }),
@@ -22,26 +22,22 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const trending = products.slice(0, 6);
-  const movers = [...products].sort((a, b) => b.changePct - a.changePct).slice(0, 4);
+  const featured = [...products].sort((a, b) => a.inStock - b.inStock).slice(0, 4);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
 
-      {/* Ticker */}
+      {/* Announcement strip */}
       <div className="border-b border-border bg-surface">
         <div className="ticker-mask overflow-hidden">
           <div className="flex animate-[scroll_45s_linear_infinite] gap-10 whitespace-nowrap py-2 font-mono text-xs text-muted-foreground">
-            {[...products, ...products].map((p, i) => (
-              <span key={i} className="inline-flex items-center gap-2">
-                <span className="text-foreground">{p.name}</span>
-                <span>{formatPrice(p.lastSale)}</span>
-                <span className={p.changePct >= 0 ? "text-primary" : "text-destructive"}>
-                  {p.changePct >= 0 ? "▲" : "▼"} {Math.abs(p.changePct).toFixed(1)}%
-                </span>
-                <span className="text-border">·</span>
-              </span>
-            ))}
+            {[...Array(2)].flatMap((_, k) => [
+              <span key={`a${k}`} className="inline-flex items-center gap-2"><span className="text-primary">●</span> Free worldwide shipping over $250 <span className="text-border">·</span></span>,
+              <span key={`b${k}`} className="inline-flex items-center gap-2"><span className="text-primary">●</span> Every pair authenticated by Thato <span className="text-border">·</span></span>,
+              <span key={`c${k}`} className="inline-flex items-center gap-2"><span className="text-primary">●</span> New drops every Friday <span className="text-border">·</span></span>,
+              <span key={`d${k}`} className="inline-flex items-center gap-2"><span className="text-primary">●</span> Shipped from Johannesburg <span className="text-border">·</span></span>,
+            ])}
           </div>
         </div>
       </div>
@@ -62,19 +58,18 @@ function Home() {
               <Sparkles className="h-3.5 w-3.5" /> Thato's Drop · Week 19
             </span>
             <h1 className="font-display text-5xl font-bold leading-[0.95] md:text-7xl">
-              The market<br />
-              for grails<span className="text-primary">.</span>
+              Grails, in stock<span className="text-primary">.</span>
             </h1>
             <p className="max-w-md text-base text-muted-foreground">
-              Live ask & bid pricing on the most-wanted Nike, Jordan, Adidas and Puma.
-              Every pair authenticated by Thato — no fakes, no excuses.
+              Hand-picked Nike, Jordan, Adidas and Puma at one fixed price.
+              No bidding wars, no surprises — just authenticated heat shipped to your door.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
                 to="/shop"
                 className="inline-flex items-center gap-2 rounded-sm bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
               >
-                Shop the market <ArrowRight className="h-4 w-4" />
+                Shop the storefront <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/about"
@@ -96,23 +91,23 @@ function Home() {
             </div>
           </div>
 
-          {/* Top movers card */}
+          {/* Featured / low stock card */}
           <div className="flex items-end md:justify-end">
             <div className="w-full max-w-md rounded-sm border border-border bg-card/80 p-5 backdrop-blur-md md:w-[420px]">
               <div className="flex items-center justify-between border-b border-border pb-3">
                 <div>
                   <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                    Live · Top Movers
+                    Going fast
                   </div>
-                  <div className="font-display text-lg font-semibold">24h Market</div>
+                  <div className="font-display text-lg font-semibold">Low stock alert</div>
                 </div>
                 <span className="inline-flex items-center gap-1 text-[11px] text-primary">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-                  Open
+                  Live
                 </span>
               </div>
               <ul className="mt-3 divide-y divide-border">
-                {movers.map((p) => (
+                {featured.map((p) => (
                   <li key={p.slug} className="flex items-center gap-3 py-3">
                     <img
                       src={p.image}
@@ -129,8 +124,10 @@ function Home() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-mono text-sm">{formatPrice(p.lastSale)}</div>
-                      <div className="text-xs text-primary">+{p.changePct.toFixed(1)}%</div>
+                      <div className="font-mono text-sm">{formatPrice(p.price)}</div>
+                      <div className={`text-xs ${p.inStock <= 5 ? "text-destructive" : "text-muted-foreground"}`}>
+                        {p.inStock} left
+                      </div>
                     </div>
                   </li>
                 ))}
@@ -164,10 +161,10 @@ function Home() {
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
             <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-              Trending now
+              In stock now
             </div>
             <h2 className="font-display text-3xl font-bold md:text-4xl">
-              What the market is chasing
+              This week's heat
             </h2>
           </div>
           <Link
@@ -195,8 +192,8 @@ function Home() {
             },
             {
               icon: BadgeCheck,
-              h: "Live market pricing",
-              p: "Lowest ask, highest bid and last sale — real numbers, updated in real time.",
+              h: "One fixed price",
+              p: "What you see is what you pay. No bidding, no haggling — just clear pricing.",
             },
             {
               icon: Globe2,

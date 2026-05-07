@@ -13,13 +13,12 @@ export type Product = {
   brand: Brand;
   colorway: string;
   image: string;
-  lastSale: number;
-  lowestAsk: number;
-  highestBid: number;
+  price: number;
   retail: number;
   releaseYear: number;
-  changePct: number;
-  premiumPct: number;
+  inStock: number;
+  isNew?: boolean;
+  isHot?: boolean;
   category: "Lifestyle" | "Basketball" | "Running" | "Skate";
 };
 
@@ -30,13 +29,11 @@ export const products: Product[] = [
     brand: "Jordan",
     colorway: "Black / White",
     image: jordan1,
-    lastSale: 312,
-    lowestAsk: 325,
-    highestBid: 298,
+    price: 325,
     retail: 180,
     releaseYear: 2024,
-    changePct: 4.2,
-    premiumPct: 73,
+    inStock: 8,
+    isHot: true,
     category: "Basketball",
   },
   {
@@ -45,13 +42,11 @@ export const products: Product[] = [
     brand: "Jordan",
     colorway: "Bred Reimagined",
     image: jordan4,
-    lastSale: 425,
-    lowestAsk: 449,
-    highestBid: 410,
+    price: 449,
     retail: 215,
     releaseYear: 2024,
-    changePct: 8.1,
-    premiumPct: 109,
+    inStock: 3,
+    isHot: true,
     category: "Basketball",
   },
   {
@@ -60,13 +55,10 @@ export const products: Product[] = [
     brand: "Nike",
     colorway: "Metallic Silver",
     image: dunk,
-    lastSale: 168,
-    lowestAsk: 175,
-    highestBid: 155,
+    price: 175,
     retail: 115,
     releaseYear: 2023,
-    changePct: -2.3,
-    premiumPct: 46,
+    inStock: 12,
     category: "Lifestyle",
   },
   {
@@ -75,13 +67,10 @@ export const products: Product[] = [
     brand: "Adidas",
     colorway: "Steel Grey",
     image: yeezy,
-    lastSale: 289,
-    lowestAsk: 305,
-    highestBid: 270,
+    price: 305,
     retail: 230,
     releaseYear: 2023,
-    changePct: 1.4,
-    premiumPct: 26,
+    inStock: 5,
     category: "Lifestyle",
   },
   {
@@ -90,13 +79,11 @@ export const products: Product[] = [
     brand: "Adidas",
     colorway: "Night Indigo",
     image: samba,
-    lastSale: 142,
-    lowestAsk: 149,
-    highestBid: 130,
+    price: 149,
     retail: 100,
     releaseYear: 2024,
-    changePct: 12.5,
-    premiumPct: 42,
+    inStock: 14,
+    isNew: true,
     category: "Lifestyle",
   },
   {
@@ -105,13 +92,11 @@ export const products: Product[] = [
     brand: "Puma",
     colorway: "High Risk Red",
     image: puma,
-    lastSale: 98,
-    lowestAsk: 105,
-    highestBid: 88,
+    price: 105,
     retail: 80,
     releaseYear: 2024,
-    changePct: 3.7,
-    premiumPct: 22,
+    inStock: 20,
+    isNew: true,
     category: "Lifestyle",
   },
 ];
