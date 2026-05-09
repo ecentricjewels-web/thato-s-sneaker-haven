@@ -7,7 +7,7 @@ import { brands, products, type Brand } from "@/lib/products";
 import { z } from "zod";
 
 const searchSchema = z.object({
-  brand: z.enum(["Nike", "Jordan", "Adidas", "Puma"]).optional(),
+  brand: z.enum(["Nike", "Jordan", "Adidas", "Puma", "New Balance"]).optional(),
 });
 
 export const Route = createFileRoute("/shop")({
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/shop")({
       {
         name: "description",
         content:
-          "Browse authenticated Nike, Jordan, Adidas and Puma sneakers with live market prices.",
+          "Browse the catalogue: Nike, Jordan, Adidas, Puma and New Balance sneakers at fixed prices in ZAR.",
       },
     ],
   }),
@@ -43,7 +43,7 @@ function Shop() {
         list.sort((a, b) => b.price - a.price);
         break;
       case "newest":
-        list.sort((a, b) => b.releaseYear - a.releaseYear);
+        list.sort((a, b) => Number(!!b.isNew) - Number(!!a.isNew));
         break;
     }
     return list;
@@ -55,14 +55,14 @@ function Shop() {
       <section className="border-b border-border bg-surface">
         <div className="mx-auto max-w-[1400px] px-4 py-12">
           <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-            The Market
+            The catalogue
           </div>
           <h1 className="font-display text-4xl font-bold md:text-5xl">
             Shop {brand === "All" ? "all sneakers" : brand}
           </h1>
           <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-            Browse Thato's curated stock. Filter by brand, sort by movement, and ask
-            below the market to snag your grail.
+            Browse Thato's hand-picked stock. Filter by brand or sort by price —
+            every pair is fixed price, in stock and ready to ship.
           </p>
         </div>
       </section>
@@ -103,7 +103,7 @@ function Shop() {
           Showing <span className="text-foreground">{filtered.length}</span> products
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
           {filtered.map((p) => (
             <ProductCard key={p.slug} product={p} />
           ))}
