@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Truck, ShieldCheck, RefreshCw } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Header } from "@/components/storefront/Header";
 import { Footer } from "@/components/storefront/Footer";
 import { ProductCard } from "@/components/storefront/ProductCard";
@@ -9,11 +9,11 @@ import heroImg from "@/assets/hero-sneaker.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Thato's Storefront — Sneakers from Nike, Jordan, Adidas, Puma & New Balance" },
+      { title: "Thato's Storefront — The Marketplace for Sneaker Lovers" },
       {
         name: "description",
         content:
-          "Shop curated sneakers in South Africa. Nike, Jordan, Adidas, Puma and New Balance — fixed prices, fast shipping from Johannesburg.",
+          "Browse Thato's curated selection of today's hottest pairs. Nike, Jordan, Adidas, Puma and New Balance — fixed prices, nationwide shipping.",
       },
     ],
   }),
@@ -21,7 +21,6 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const newest = products.filter((p) => p.isNew).slice(0, 4);
   const featured = products.slice(0, 8);
 
   return (
@@ -44,12 +43,10 @@ function Home() {
               Thato's Storefront
             </span>
             <h1 className="font-display text-5xl font-bold leading-[0.95] md:text-7xl">
-              Step into your<br />next pair<span className="text-primary">.</span>
+              The Marketplace<br />for Sneaker Lovers<span className="text-primary">.</span>
             </h1>
             <p className="max-w-md text-base text-muted-foreground">
-              A tightly-curated catalogue of Nike, Jordan, Adidas, Puma and
-              New Balance sneakers — hand-picked by Thato and shipped fast
-              from Johannesburg.
+              Browse my curated selection of today's hottest pairs.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
@@ -87,33 +84,6 @@ function Home() {
         </div>
       </section>
 
-      {/* New in */}
-      {newest.length > 0 && (
-        <section className="mx-auto max-w-[1400px] px-4 py-16">
-          <div className="mb-8 flex items-end justify-between gap-4">
-            <div>
-              <div className="text-[11px] uppercase tracking-[0.22em] text-primary">
-                Just landed
-              </div>
-              <h2 className="font-display text-3xl font-bold md:text-4xl">
-                New in this week
-              </h2>
-            </div>
-            <Link
-              to="/shop"
-              className="hidden items-center gap-1 text-sm text-muted-foreground hover:text-primary md:inline-flex"
-            >
-              View all <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {newest.map((p) => (
-              <ProductCard key={p.slug} product={p} />
-            ))}
-          </div>
-        </section>
-      )}
-
       {/* Featured catalogue */}
       <section className="mx-auto max-w-[1400px] px-4 py-16">
         <div className="mb-8 flex items-end justify-between gap-4">
@@ -135,23 +105,6 @@ function Home() {
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {featured.map((p) => (
             <ProductCard key={p.slug} product={p} />
-          ))}
-        </div>
-      </section>
-
-      {/* Service */}
-      <section className="border-y border-border bg-surface">
-        <div className="mx-auto grid max-w-[1400px] gap-px bg-border md:grid-cols-3">
-          {[
-            { icon: Truck, h: "Fast shipping", p: "Tracked nationwide delivery in 2–4 working days. Free over R2 500." },
-            { icon: ShieldCheck, h: "100% authentic", p: "Every pair is sourced and inspected by Thato before it ships." },
-            { icon: RefreshCw, h: "Easy returns", p: "Unworn pairs can be returned within 7 days for a full refund." },
-          ].map((f) => (
-            <div key={f.h} className="bg-background p-8">
-              <f.icon className="h-6 w-6 text-primary" />
-              <h3 className="mt-4 font-display text-lg font-semibold">{f.h}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{f.p}</p>
-            </div>
           ))}
         </div>
       </section>
