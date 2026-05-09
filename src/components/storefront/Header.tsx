@@ -1,18 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { Search, ShoppingBag, User, BadgeCheck } from "lucide-react";
+import { Search, ShoppingBag, User, Heart } from "lucide-react";
 import { brands } from "@/lib/products";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-xl">
-      <div className="border-b border-border/60">
-        <div className="mx-auto flex h-9 max-w-[1400px] items-center justify-between px-4 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-          <span>Authenticated. Verified. Shipped from Johannesburg.</span>
-          <div className="hidden gap-6 md:flex">
-            <span>Help</span>
-            <span>Sell</span>
-            <span>EN / USD</span>
-          </div>
+      <div className="border-b border-border/60 bg-surface">
+        <div className="mx-auto flex h-9 max-w-[1400px] items-center justify-center px-4 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+          <span>Free delivery on orders over R2 500 · Shipped from Johannesburg</span>
         </div>
       </div>
 
@@ -34,7 +29,7 @@ export function Header() {
         <div className="relative hidden flex-1 md:block">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
-            placeholder="Search by brand, model, colorway, or SKU"
+            placeholder="Search sneakers, brands, colourways"
             className="h-10 w-full rounded-sm border border-border bg-surface pl-10 pr-4 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none"
           />
         </div>
@@ -52,8 +47,11 @@ export function Header() {
             className="rounded-sm px-3 py-2 text-sm text-muted-foreground transition hover:text-foreground"
             activeProps={{ className: "text-foreground" }}
           >
-            About Thato
+            About
           </Link>
+          <button className="hidden h-9 w-9 items-center justify-center rounded-sm text-muted-foreground hover:text-foreground md:inline-flex">
+            <Heart className="h-4 w-4" />
+          </button>
           <button className="hidden h-9 w-9 items-center justify-center rounded-sm text-muted-foreground hover:text-foreground md:inline-flex">
             <User className="h-4 w-4" />
           </button>
@@ -66,6 +64,12 @@ export function Header() {
 
       <div className="border-t border-border/60">
         <div className="mx-auto flex h-11 max-w-[1400px] items-center gap-6 px-4 text-sm">
+          <Link
+            to="/shop"
+            className="text-muted-foreground transition hover:text-foreground"
+          >
+            All sneakers
+          </Link>
           {brands.map((b) => (
             <Link
               key={b}
@@ -76,8 +80,8 @@ export function Header() {
               {b}
             </Link>
           ))}
-          <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] text-primary">
-            <BadgeCheck className="h-3.5 w-3.5" /> Verified Seller · 4.97★ (2,184)
+          <span className="ml-auto text-[11px] uppercase tracking-[0.2em] text-primary">
+            New arrivals weekly
           </span>
         </div>
       </div>

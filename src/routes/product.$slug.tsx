@@ -1,8 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, BadgeCheck, ShieldCheck, ShoppingBag, Truck } from "lucide-react";
+import { ArrowLeft, ShieldCheck, ShoppingBag, Truck, RefreshCw } from "lucide-react";
 import { Header } from "@/components/storefront/Header";
 import { Footer } from "@/components/storefront/Footer";
-import { formatPrice, getProduct, products } from "@/lib/products";
+import { formatPrice, getProduct, getColorways, products } from "@/lib/products";
 import { useState } from "react";
 
 export const Route = createFileRoute("/product/$slug")({
@@ -13,10 +13,10 @@ export const Route = createFileRoute("/product/$slug")({
   },
   head: ({ loaderData }) => ({
     meta: [
-      { title: `${loaderData?.product.name} — Thato's Storefront` },
+      { title: `${loaderData?.product.name} ${loaderData?.product.colorway} — Thato's Storefront` },
       {
         name: "description",
-        content: `${loaderData?.product.name} ${loaderData?.product.colorway}. Authenticated by Thato. Shipped worldwide.`,
+        content: `${loaderData?.product.name} in ${loaderData?.product.colorway}. ${loaderData ? formatPrice(loaderData.product.price) : ""}. Shipped from Johannesburg.`,
       },
       { property: "og:image", content: loaderData?.product.image ?? "" },
     ],
@@ -49,9 +49,10 @@ const SIZES = ["7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "
 function ProductPage() {
   const { product } = Route.useLoaderData();
   const [size, setSize] = useState<string | null>(null);
-  const lowStock = product.inStock <= 5;
-
-  const related = products.filter((p) => p.slug !== product.slug).slice(0, 4);
+  const colorways = getColorways(product);
+  const related = products
+    .filter((p) => p.brand === product.brand && p.name !== product.name)
+    .slice(0, 4);
 
   return (
     <div className="min-h-screen bg-background">
@@ -115,15 +116,39 @@ function ProductPage() {
               <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                 Availability
               </div>
-              <div className={`font-mono text-sm ${lowStock ? "text-destructive" : "text-foreground"}`}>
-                {lowStock ? `Only ${product.inStock} left` : `In stock · ${product.inStock} pairs`}
+              <div className="font-mono text-sm text-foreground">
+                In stock · ready to ship
               </div>
             </div>
           </div>
 
+          {colorways.length > 1 && (
+            <div>
+              <div className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                Colour · {product.colorway}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {colorways.map((c) => (
+                  <Link
+                    key={c.slug}
+                    to="/product/$slug"
+                    params={{ slug: c.slug }}
+                    className={`overflow-hidden rounded-sm border transition ${
+                      c.slug === product.slug
+                        ? "border-primary"
+                        : "border-border hover:border-border-strong"
+                    }`}
+                  >
+                    <img src={c.image} alt={c.colorway} className="h-16 w-16 object-cover" />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div>
             <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
-              <span className="uppercase tracking-[0.18em]">Select size · US M</span>
+              <span className="uppercase tracking-[0.18em]">Select size · UK</span>
               <span>Size guide</span>
             </div>
             <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
@@ -157,47 +182,49 @@ function ProductPage() {
           </div>
 
           <div className="grid grid-cols-3 gap-3 text-xs">
-            <Trust icon={ShieldCheck} label="Authenticated" />
-            <Trust icon={BadgeCheck} label="Fixed price" />
-            <Trust icon={Truck} label="Ships worldwide" />
+            <Trust icon={ShieldCheck} label="100% authentic" />
+            <Trust icon={Truck} label="Fast shipping" />
+            <Trust icon={RefreshCw} label="7-day returns" />
           </div>
 
           <div className="rounded-sm border border-border bg-card p-5 text-sm leading-relaxed text-muted-foreground">
             <div className="mb-2 text-[11px] uppercase tracking-[0.2em] text-foreground">
               Product details
             </div>
-            Released {product.releaseYear} · Original retail {formatPrice(product.retail)}.
-            A staple of the {product.brand} lineup, this {product.colorway} colorway is
-            one of Thato's hand-picked favourites — sourced fresh, inspected end-to-end,
-            and shipped ready to wear.
+            The {product.name} in {product.colorway} — one of Thato's hand-picked
+            picks from the {product.brand} lineup. Sourced fresh, quality-checked
+            end-to-end, and packaged ready to wear.
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1400px] border-t border-border px-4 py-12">
-        <h2 className="mb-6 font-display text-2xl font-bold">You might also like</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {related.map((p) => (
-            <Link
-              key={p.slug}
-              to="/product/$slug"
-              params={{ slug: p.slug }}
-              className="group overflow-hidden rounded-sm border border-border bg-card transition hover:border-border-strong"
-            >
-              <img
-                src={p.image}
-                alt={p.name}
-                loading="lazy"
-                className="aspect-square w-full object-cover transition group-hover:scale-105"
-              />
-              <div className="p-3">
-                <div className="truncate text-sm">{p.name}</div>
-                <div className="text-xs text-primary">{formatPrice(p.price)}</div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+      {related.length > 0 && (
+        <section className="mx-auto max-w-[1400px] border-t border-border px-4 py-12">
+          <h2 className="mb-6 font-display text-2xl font-bold">More from {product.brand}</h2>
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+            {related.map((p) => (
+              <Link
+                key={p.slug}
+                to="/product/$slug"
+                params={{ slug: p.slug }}
+                className="group overflow-hidden rounded-sm border border-border bg-card transition hover:border-border-strong"
+              >
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  loading="lazy"
+                  className="aspect-square w-full object-cover transition group-hover:scale-105"
+                />
+                <div className="p-3">
+                  <div className="truncate text-sm">{p.name}</div>
+                  <div className="truncate text-xs text-muted-foreground">{p.colorway}</div>
+                  <div className="mt-1 text-xs text-primary">{formatPrice(p.price)}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>
