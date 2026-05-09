@@ -51,6 +51,8 @@ function ProductPage() {
   const { product } = Route.useLoaderData();
   const [size, setSize] = useState<string | null>(null);
   const colorways = getColorways(product);
+  const { addToCart, toggleWishlist, isWishlisted } = useStore();
+  const saved = isWishlisted(product.slug);
   const related = products
     .filter((p) => p.brand === product.brand && p.name !== product.name)
     .slice(0, 4);
