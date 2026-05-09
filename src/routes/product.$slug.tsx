@@ -174,13 +174,22 @@ function ProductPage() {
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto]">
             <button
               disabled={!size}
+              onClick={() => size && addToCart(product, size)}
               className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-primary py-4 text-sm font-semibold uppercase tracking-[0.18em] text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ShoppingBag className="h-4 w-4" />
               {size ? `Add to bag — Size ${size}` : "Select a size"}
             </button>
-            <button className="rounded-sm border border-border-strong bg-surface px-5 py-4 text-sm font-medium hover:border-primary">
-              ♡ Save
+            <button
+              onClick={() => toggleWishlist(product.slug)}
+              className={`inline-flex items-center justify-center gap-2 rounded-sm border px-5 py-4 text-sm font-medium transition ${
+                saved
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border-strong bg-surface hover:border-primary"
+              }`}
+            >
+              <Heart className={`h-4 w-4 ${saved ? "fill-primary" : ""}`} />
+              {saved ? "Saved" : "Save"}
             </button>
           </div>
 
