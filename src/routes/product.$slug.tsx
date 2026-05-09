@@ -1,8 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ShieldCheck, ShoppingBag, Truck, RefreshCw } from "lucide-react";
+import { ArrowLeft, Heart, ShieldCheck, ShoppingBag, Truck, RefreshCw } from "lucide-react";
 import { Header } from "@/components/storefront/Header";
 import { Footer } from "@/components/storefront/Footer";
 import { formatPrice, getProduct, getColorways, products } from "@/lib/products";
+import { useStore } from "@/lib/store";
 import { useState } from "react";
 
 export const Route = createFileRoute("/product/$slug")({
