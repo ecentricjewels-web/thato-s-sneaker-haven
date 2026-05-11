@@ -155,7 +155,7 @@ function ProductPage() {
               <span>Size guide</span>
             </div>
             <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
-              {product.sizes.map((s) => (
+              {product.sizes.map((s: string) => (
                 <button
                   key={s}
                   onClick={() => setSize(s)}
