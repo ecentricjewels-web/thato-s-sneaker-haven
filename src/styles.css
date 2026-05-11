@@ -63,8 +63,8 @@
   --popover: oklch(0.16 0 0);
   --popover-foreground: oklch(0.98 0 0);
 
-  /* StockX signature electric green */
-  --primary: oklch(0.78 0.23 142);
+  /* StockX signature green (#00A862) */
+  --primary: oklch(0.65 0.18 152);
   --primary-foreground: oklch(0.12 0 0);
 
   --secondary: oklch(0.22 0 0);
@@ -73,21 +73,21 @@
   --muted: oklch(0.2 0 0);
   --muted-foreground: oklch(0.65 0 0);
 
-  --accent: oklch(0.78 0.23 142);
+  --accent: oklch(0.65 0.18 152);
   --accent-foreground: oklch(0.12 0 0);
 
   --destructive: oklch(0.65 0.24 25);
   --destructive-foreground: oklch(0.98 0 0);
 
-  --success: oklch(0.78 0.23 142);
+  --success: oklch(0.65 0.18 152);
   --warning: oklch(0.82 0.18 80);
 
   --border: oklch(0.25 0 0);
   --border-strong: oklch(0.35 0 0);
   --input: oklch(0.22 0 0);
-  --ring: oklch(0.78 0.23 142);
+  --ring: oklch(0.65 0.18 152);
 
-  --chart-1: oklch(0.78 0.23 142);
+  --chart-1: oklch(0.65 0.18 152);
   --chart-2: oklch(0.7 0.18 200);
   --chart-3: oklch(0.75 0.18 50);
   --chart-4: oklch(0.65 0.22 320);

@@ -37,9 +37,11 @@ export function Header() {
           >
             About
           </Link>
-          <button
+          <Link
+            to="/wishlist"
             className="relative hidden h-9 w-9 items-center justify-center rounded-sm text-muted-foreground hover:text-foreground md:inline-flex"
             aria-label="Wishlist"
+            activeProps={{ className: "text-foreground" }}
           >
             <Heart className="h-4 w-4" />
             {wishlist.length > 0 && (
@@ -47,7 +49,7 @@ export function Header() {
                 {wishlist.length}
               </span>
             )}
-          </button>
+          </Link>
           <button
             onClick={() => setCartOpen(true)}
             className="relative inline-flex h-9 items-center gap-2 rounded-sm bg-primary px-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
