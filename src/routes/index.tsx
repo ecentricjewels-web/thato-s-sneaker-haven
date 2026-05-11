@@ -86,26 +86,28 @@ function Home() {
 
       {/* Featured catalogue */}
       <section className="mx-auto max-w-[1400px] px-4 py-16">
-        <div className="mb-8 flex items-end justify-between gap-4">
-          <div>
-            <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-              The catalogue
-            </div>
-            <h2 className="font-display text-3xl font-bold md:text-4xl">
-              Featured pairs
-            </h2>
+        <div className="mb-8">
+          <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+            The catalogue
           </div>
-          <Link
-            to="/shop"
-            className="hidden items-center gap-1 text-sm text-muted-foreground hover:text-primary md:inline-flex"
-          >
-            Shop all <ArrowRight className="h-4 w-4" />
-          </Link>
+          <h2 className="font-display text-3xl font-bold md:text-4xl">
+            Featured pairs
+          </h2>
         </div>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {featured.map((p) => (
             <ProductCard key={p.slug} product={p} />
           ))}
+        </div>
+        <div className="mt-14 flex justify-center">
+          <Link
+            to="/shop"
+            className="group relative inline-flex items-center gap-3 rounded-sm bg-primary px-10 py-5 text-base font-bold uppercase tracking-[0.22em] text-primary-foreground shadow-[0_0_60px_-10px_var(--primary)] transition hover:shadow-[0_0_90px_-5px_var(--primary)] hover:scale-[1.02]"
+          >
+            <span className="absolute inset-0 -z-10 animate-pulse rounded-sm bg-primary/40 blur-xl" />
+            Shop all
+            <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
+          </Link>
         </div>
       </section>
 

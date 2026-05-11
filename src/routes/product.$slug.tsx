@@ -45,7 +45,7 @@ export const Route = createFileRoute("/product/$slug")({
   component: ProductPage,
 });
 
-const SIZES = ["7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "13"];
+
 
 function ProductPage() {
   const { product } = Route.useLoaderData();
@@ -155,7 +155,7 @@ function ProductPage() {
               <span>Size guide</span>
             </div>
             <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
-              {SIZES.map((s) => (
+              {product.sizes.map((s) => (
                 <button
                   key={s}
                   onClick={() => setSize(s)}
@@ -165,7 +165,7 @@ function ProductPage() {
                       : "border-border bg-surface hover:border-border-strong"
                   }`}
                 >
-                  {s}
+                  UK {s}
                 </button>
               ))}
             </div>
