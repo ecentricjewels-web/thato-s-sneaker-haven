@@ -56,7 +56,7 @@ export function Footer() {
               {col.l.map((i) => (
                 <li key={i.label}>
                   <Link
-                    to={i.to}
+                    to={i.to as never}
                     search={i.search as never}
                     className="text-foreground/80 transition hover:text-primary"
                   >
