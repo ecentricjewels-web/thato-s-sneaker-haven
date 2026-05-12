@@ -42,12 +42,11 @@ function About() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-px rounded-sm border border-border bg-border">
+          <div className="grid grid-cols-3 gap-px rounded-sm border border-border bg-border">
             {[
               { k: "20+", v: "Pairs in catalogue" },
               { k: "5", v: "Trusted brands" },
               { k: "2–4", v: "Day delivery" },
-              { k: "7-day", v: "Returns window" },
             ].map((s) => (
               <div key={s.v} className="bg-card p-8">
                 <div className="font-display text-3xl font-bold text-primary">{s.k}</div>
@@ -66,7 +65,7 @@ function About() {
           {[
             { n: "01", h: "Browse the catalogue", p: "Filter by brand, pick a colourway, see one clear price in rands.", icon: ShieldCheck },
             { n: "02", h: "Add to bag & checkout", p: "Choose your size, add to bag and pay securely. No bidding, no waiting.", icon: Truck },
-            { n: "03", h: "Shipped from JHB", p: "Tracked nationwide delivery in 2–4 working days. Free over R2 500.", icon: RefreshCw },
+            { n: "03", h: "Shipped from JHB", p: "Tracked nationwide delivery in 2–4 working days. Free over R2 800.", icon: RefreshCw },
           ].map((s) => (
             <div key={s.n} className="bg-background p-8">
               <div className="font-mono text-sm text-primary">{s.n}</div>
@@ -74,31 +73,6 @@ function About() {
               <p className="mt-2 text-sm text-muted-foreground">{s.p}</p>
             </div>
           ))}
-        </div>
-      </section>
-
-      <section className="border-y border-border bg-surface">
-        <div className="mx-auto max-w-[1400px] px-4 py-16">
-          <div className="mb-8 flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-            <Star className="h-4 w-4 text-primary" /> Customer reviews
-          </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {[
-              { n: "Lerato M.", t: "Got my Jordan 4s in 3 days, packaged like a museum piece. Real ones only." },
-              { n: "Kyle D.", t: "Clean website, easy checkout, fair prices. Will be back for the TNs." },
-              { n: "Aisha K.", t: "First time ordering — comms, condition and delivery all 10/10." },
-            ].map((r) => (
-              <div key={r.n} className="rounded-sm border border-border bg-card p-6">
-                <div className="flex gap-0.5 text-primary">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-current" />
-                  ))}
-                </div>
-                <p className="mt-3 text-sm text-foreground/90">"{r.t}"</p>
-                <div className="mt-4 text-xs text-muted-foreground">— {r.n}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
