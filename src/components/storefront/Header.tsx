@@ -24,6 +24,14 @@ export function Header() {
 
         <nav className="ml-auto flex items-center gap-1">
           <Link
+            to="/"
+            className="rounded-sm px-3 py-2 text-sm text-muted-foreground transition hover:text-foreground"
+            activeOptions={{ exact: true }}
+            activeProps={{ className: "text-foreground" }}
+          >
+            Home
+          </Link>
+          <Link
             to="/shop"
             className="rounded-sm px-3 py-2 text-sm text-muted-foreground transition hover:text-foreground"
             activeProps={{ className: "text-foreground" }}
