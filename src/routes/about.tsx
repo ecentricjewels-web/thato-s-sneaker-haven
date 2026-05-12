@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MapPin, Star, Truck, ShieldCheck, RefreshCw } from "lucide-react";
+import { MapPin, Truck, ShieldCheck, RefreshCw } from "lucide-react";
 import { Header } from "@/components/storefront/Header";
 import { Footer } from "@/components/storefront/Footer";
 
