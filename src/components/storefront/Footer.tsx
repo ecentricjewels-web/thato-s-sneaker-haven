@@ -1,3 +1,34 @@
+import { Link } from "@tanstack/react-router";
+
+const COLS: { h: string; l: { label: string; to: string; search?: Record<string, string> }[] }[] = [
+  {
+    h: "Shop",
+    l: [
+      { label: "Nike", to: "/shop", search: { brand: "Nike" } },
+      { label: "Jordan", to: "/shop", search: { brand: "Jordan" } },
+      { label: "Adidas", to: "/shop", search: { brand: "Adidas" } },
+      { label: "Puma", to: "/shop", search: { brand: "Puma" } },
+      { label: "New Balance", to: "/shop", search: { brand: "New Balance" } },
+    ],
+  },
+  {
+    h: "Help",
+    l: [
+      { label: "Shipping", to: "/shipping" },
+      { label: "Contact", to: "/contact" },
+      { label: "Track order", to: "/track-order" },
+    ],
+  },
+  {
+    h: "Storefront",
+    l: [
+      { label: "About Thato", to: "/about" },
+      { label: "Wishlist", to: "/wishlist" },
+      { label: "Shop all", to: "/shop" },
+    ],
+  },
+];
+
 export function Footer() {
   return (
     <footer className="mt-24 border-t border-border bg-surface">
@@ -16,19 +47,21 @@ export function Footer() {
             Open for orders
           </div>
         </div>
-        {[
-          { h: "Shop", l: ["Nike", "Jordan", "Adidas", "Puma", "New Balance"] },
-          { h: "Help", l: ["Shipping", "Returns", "Size guide", "Contact"] },
-          { h: "Storefront", l: ["About Thato", "Track order", "Wishlist", "FAQ"] },
-        ].map((col) => (
+        {COLS.map((col) => (
           <div key={col.h}>
             <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
               {col.h}
             </div>
             <ul className="mt-4 space-y-2 text-sm">
               {col.l.map((i) => (
-                <li key={i} className="text-foreground/80 hover:text-foreground">
-                  {i}
+                <li key={i.label}>
+                  <Link
+                    to={i.to}
+                    search={i.search as never}
+                    className="text-foreground/80 transition hover:text-primary"
+                  >
+                    {i.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -38,7 +71,7 @@ export function Footer() {
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-4 px-4 py-5 text-xs text-muted-foreground">
           <span>© {new Date().getFullYear()} Thato's Storefront. All rights reserved.</span>
-          <span>Johannesburg ↔ Worldwide</span>
+          <span>Johannesburg ↔ Nationwide</span>
         </div>
       </div>
     </footer>
