@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Header } from "@/components/storefront/Header";
 import { Footer } from "@/components/storefront/Footer";
 import { ProductCard } from "@/components/storefront/ProductCard";
+import { ReviewsSection } from "@/components/storefront/ReviewsSection";
 import { brands, products } from "@/lib/products";
 import heroImg from "@/assets/hero-sneaker.jpg";
 
@@ -110,6 +111,8 @@ function Home() {
           </Link>
         </div>
       </section>
+
+      <ReviewsSection />
 
       <Footer />
     </div>
