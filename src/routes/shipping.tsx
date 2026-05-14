@@ -81,7 +81,7 @@ function ShippingPage() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-sm border border-border px-5 py-3 text-sm font-medium hover:border-primary"
           >
-            Got a question? Chat on WhatsApp
+            Got a question? Contact Thato
           </a>
         </div>
       </section>
