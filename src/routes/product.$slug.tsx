@@ -71,28 +71,14 @@ function ProductPage() {
       </div>
 
       <section className="mx-auto grid max-w-[1400px] gap-10 px-4 pb-12 lg:grid-cols-[1.1fr_1fr]">
-        <div className="space-y-3">
-          <div className="overflow-hidden rounded-sm border border-border bg-card">
-            <img
-              src={product.image}
-              alt={`${product.name} ${product.colorway}`}
-              width={1200}
-              height={1200}
-              className="aspect-square w-full object-cover"
-            />
-          </div>
-          <div className="grid grid-cols-4 gap-3">
-            {[0, 1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className={`aspect-square overflow-hidden rounded-sm border bg-card ${
-                  i === 0 ? "border-primary" : "border-border opacity-70"
-                }`}
-              >
-                <img src={product.image} alt="" className="h-full w-full object-cover" />
-              </div>
-            ))}
-          </div>
+        <div className="overflow-hidden rounded-sm border border-border bg-card">
+          <img
+            src={product.image}
+            alt={`${product.name} ${product.colorway}`}
+            width={1200}
+            height={1200}
+            className="aspect-square w-full object-cover"
+          />
         </div>
 
         <div className="flex flex-col gap-6">

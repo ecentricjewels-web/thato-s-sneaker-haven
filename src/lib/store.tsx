@@ -38,8 +38,6 @@ type StoreCtx = {
   wishlist: string[];
   reviews: Review[];
   cartCount: number;
-  cartOpen: boolean;
-  setCartOpen: (open: boolean) => void;
   addToCart: (product: Product, size: string) => void;
   removeFromCart: (slug: string, size: string) => void;
   updateQty: (slug: string, size: string, qty: number) => void;
@@ -62,7 +60,6 @@ const SEED_REVIEWS: Review[] = [
   { id: "r3", name: "Aisha K.", rating: 5, text: "First time ordering — comms, condition and delivery all 10/10.", date: "2026-05-02" },
 ];
 
-// Demo orders so the track page works out of the box
 const DEMO_ORDERS: Order[] = [
   { id: "12345", status: "Processing", updatedAt: "2026-05-12T14:03:00Z", createdAt: "2026-05-10T09:12:00Z", itemName: "Air Jordan 4 Retro — Black Cat", size: "UK 8" },
   { id: "12346", status: "Out for Delivery", updatedAt: "2026-05-12T08:21:00Z", createdAt: "2026-05-09T11:00:00Z", itemName: "Nike Shox TL — Triple Black", size: "UK 9" },
@@ -74,7 +71,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [reviews, setReviews] = useState<Review[]>(SEED_REVIEWS);
-  const [cartOpen, setCartOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -99,8 +95,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       wishlist,
       reviews,
       cartCount: cart.reduce((n, i) => n + i.qty, 0),
-      cartOpen,
-      setCartOpen,
       addToCart: (product, size) => {
         setCart((prev) => {
           const i = prev.findIndex((c) => c.slug === product.slug && c.size === size);
@@ -111,7 +105,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           }
           return [...prev, { slug: product.slug, size, qty: 1 }];
         });
-        setCartOpen(true);
       },
       removeFromCart: (slug, size) =>
         setCart((prev) => prev.filter((c) => !(c.slug === slug && c.size === size))),
@@ -137,7 +130,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return DEMO_ORDERS.find((o) => o.id === trimmed) ?? null;
       },
     }),
-    [cart, wishlist, reviews, cartOpen],
+    [cart, wishlist, reviews],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
