@@ -16,7 +16,7 @@ export const Route = createFileRoute("/wishlist")({
 });
 
 function WishlistPage() {
-  const { wishlist, toggleWishlist, setCartOpen } = useStore();
+  const { wishlist, toggleWishlist } = useStore();
   const items = wishlist
     .map((slug) => getProduct(slug))
     .filter((p): p is NonNullable<typeof p> => !!p);
@@ -93,7 +93,7 @@ function WishlistPage() {
                     <Link
                       to="/product/$slug"
                       params={{ slug: p.slug }}
-                      onClick={() => setCartOpen(false)}
+                      
                       className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-sm bg-primary px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary-foreground hover:opacity-90"
                     >
                       <ShoppingBag className="h-3.5 w-3.5" /> Shop
