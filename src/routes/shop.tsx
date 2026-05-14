@@ -8,6 +8,7 @@ import { z } from "zod";
 
 const searchSchema = z.object({
   brand: z.enum(["Nike", "Jordan", "Adidas", "Puma", "New Balance"]).optional(),
+  q: z.string().optional(),
 });
 
 export const Route = createFileRoute("/shop")({
@@ -26,14 +27,21 @@ export const Route = createFileRoute("/shop")({
 });
 
 function Shop() {
-  const { brand: initial } = Route.useSearch();
+  const { brand: initial, q } = Route.useSearch();
   const [brand, setBrand] = useState<Brand | "All">(initial ?? "All");
   const [sort, setSort] = useState<"featured" | "price-asc" | "price-desc" | "newest">(
     "featured",
   );
 
+  const query = (q ?? "").trim().toLowerCase();
+
   const filtered = useMemo(() => {
     let list = brand === "All" ? products : products.filter((p) => p.brand === brand);
+    if (query) {
+      list = list.filter((p) =>
+        [p.name, p.brand, p.colorway, p.category].join(" ").toLowerCase().includes(query),
+      );
+    }
     list = [...list];
     switch (sort) {
       case "price-asc":
@@ -47,7 +55,7 @@ function Shop() {
         break;
     }
     return list;
-  }, [brand, sort]);
+  }, [brand, sort, query]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,7 +66,7 @@ function Shop() {
             The catalogue
           </div>
           <h1 className="font-display text-4xl font-bold md:text-5xl">
-            Shop {brand === "All" ? "all sneakers" : brand}
+            {query ? `Results for "${q}"` : `Shop ${brand === "All" ? "all sneakers" : brand}`}
           </h1>
           <p className="mt-2 max-w-xl text-sm text-muted-foreground">
             Browse Thato's hand-picked stock. Filter by brand or sort by price —
@@ -103,11 +111,17 @@ function Shop() {
           Showing <span className="text-foreground">{filtered.length}</span> products
         </div>
 
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
-          {filtered.map((p) => (
-            <ProductCard key={p.slug} product={p} />
-          ))}
-        </div>
+        {filtered.length === 0 ? (
+          <div className="rounded-sm border border-border bg-card p-10 text-center text-sm text-muted-foreground">
+            No sneakers match your search. Try a different keyword or brand.
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
+            {filtered.map((p) => (
+              <ProductCard key={p.slug} product={p} />
+            ))}
+          </div>
+        )}
       </div>
 
       <Footer />

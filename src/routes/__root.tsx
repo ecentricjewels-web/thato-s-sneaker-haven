@@ -10,7 +10,6 @@ import {
 
 import appCss from "../styles.css?url";
 import { StoreProvider } from "@/lib/store";
-import { CartDrawer } from "@/components/storefront/CartDrawer";
 
 function NotFoundComponent() {
   return (
@@ -131,7 +130,6 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <StoreProvider>
         <Outlet />
-        <CartDrawer />
       </StoreProvider>
     </QueryClientProvider>
   );
