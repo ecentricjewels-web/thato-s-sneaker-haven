@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Heart, ShieldCheck, ShoppingBag, Truck, RefreshCw } from "lucide-react";
+import { ArrowLeft, Heart, ShoppingBag } from "lucide-react";
 import { Header } from "@/components/storefront/Header";
 import { Footer } from "@/components/storefront/Footer";
 import { formatPrice, getProduct, getColorways, products } from "@/lib/products";
@@ -179,11 +179,6 @@ function ProductPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 text-xs">
-            <Trust icon={ShieldCheck} label="100% authentic" />
-            <Trust icon={Truck} label="Fast shipping" />
-            <Trust icon={RefreshCw} label="7-day returns" />
-          </div>
 
           <div className="rounded-sm border border-border bg-card p-5 text-sm leading-relaxed text-muted-foreground">
             <div className="mb-2 text-[11px] uppercase tracking-[0.2em] text-foreground">
@@ -225,15 +220,6 @@ function ProductPage() {
       )}
 
       <Footer />
-    </div>
-  );
-}
-
-function Trust({ icon: Icon, label }: { icon: React.ElementType; label: string }) {
-  return (
-    <div className="flex items-center gap-2 rounded-sm border border-border bg-surface px-3 py-2">
-      <Icon className="h-4 w-4 text-primary" />
-      <span>{label}</span>
     </div>
   );
 }

@@ -1,14 +1,22 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Search, ShoppingBag, Heart, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { Search, ShoppingBag, Heart, Menu, X, Check } from "lucide-react";
+import { useEffect, useState } from "react";
 import { brands } from "@/lib/products";
 import { useStore } from "@/lib/store";
 
 export function Header() {
-  const { cartCount, wishlist } = useStore();
+  const { cartCount, wishlist, lastAddedAt } = useStore();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
+  const [flash, setFlash] = useState(false);
+
+  useEffect(() => {
+    if (!lastAddedAt) return;
+    setFlash(true);
+    const t = setTimeout(() => setFlash(false), 2200);
+    return () => clearTimeout(t);
+  }, [lastAddedAt]);
 
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,14 +42,24 @@ export function Header() {
           {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </button>
 
-        <form onSubmit={submitSearch} className="relative flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search sneakers, brands, colourways"
-            className="h-10 w-full rounded-sm border border-border bg-surface pl-10 pr-4 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none"
-          />
+        <form onSubmit={submitSearch} className="relative flex flex-1 items-center gap-2">
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search sneakers, brands, colourways"
+              className="h-10 w-full rounded-sm border border-border bg-surface pl-10 pr-4 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+            />
+          </div>
+          <button
+            type="submit"
+            aria-label="Search"
+            className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-sm bg-foreground px-3 text-xs font-semibold uppercase tracking-[0.16em] text-background transition hover:opacity-90"
+          >
+            <Search className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Search</span>
+          </button>
         </form>
 
         <nav className="ml-auto hidden items-center gap-1 md:flex">
@@ -54,10 +72,13 @@ export function Header() {
               <span className="absolute -right-0.5 -top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground">{wishlist.length}</span>
             )}
           </Link>
-          <Link to="/bag" className="relative inline-flex h-9 items-center gap-2 rounded-sm bg-primary px-3 text-sm font-medium text-primary-foreground transition hover:opacity-90">
-            <ShoppingBag className="h-4 w-4" />
-            Bag · {cartCount}
-          </Link>
+          <div className="relative">
+            <Link to="/bag" className="relative inline-flex h-9 items-center gap-2 rounded-sm bg-primary px-3 text-sm font-medium text-primary-foreground transition hover:opacity-90">
+              <ShoppingBag className="h-4 w-4" />
+              Bag · {cartCount}
+            </Link>
+            {flash && <AddedPopup />}
+          </div>
         </nav>
 
         {/* Mobile bag + wishlist quick access */}
@@ -68,9 +89,12 @@ export function Header() {
               <span className="absolute right-0 top-0 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground">{wishlist.length}</span>
             )}
           </Link>
-          <Link to="/bag" className="relative inline-flex h-9 items-center gap-1.5 rounded-sm bg-primary px-2.5 text-xs font-medium text-primary-foreground">
-            <ShoppingBag className="h-3.5 w-3.5" /> {cartCount}
-          </Link>
+          <div className="relative">
+            <Link to="/bag" className="relative inline-flex h-9 items-center gap-1.5 rounded-sm bg-primary px-2.5 text-xs font-medium text-primary-foreground">
+              <ShoppingBag className="h-3.5 w-3.5" /> {cartCount}
+            </Link>
+            {flash && <AddedPopup />}
+          </div>
         </div>
       </div>
 
@@ -113,5 +137,19 @@ export function Header() {
         </div>
       </div>
     </header>
+  );
+}
+
+function AddedPopup() {
+  return (
+    <div
+      role="status"
+      className="pointer-events-none absolute right-0 top-[calc(100%+8px)] z-50 flex items-center gap-2 whitespace-nowrap rounded-sm border border-primary/40 bg-card px-3 py-2 text-xs font-medium text-foreground shadow-lg animate-in fade-in slide-in-from-top-1"
+    >
+      <span className="grid h-5 w-5 place-items-center rounded-full bg-primary text-primary-foreground">
+        <Check className="h-3 w-3" />
+      </span>
+      Added to bag — tap to view
+    </div>
   );
 }

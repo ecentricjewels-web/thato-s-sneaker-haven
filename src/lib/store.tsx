@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import type { Product } from "./products";
+import { getProduct, type Product } from "./products";
 
 export type CartItem = {
   slug: string;
@@ -38,6 +38,7 @@ type StoreCtx = {
   wishlist: string[];
   reviews: Review[];
   cartCount: number;
+  lastAddedAt: number;
   addToCart: (product: Product, size: string) => void;
   removeFromCart: (slug: string, size: string) => void;
   updateQty: (slug: string, size: string, qty: number) => void;
@@ -72,13 +73,18 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [reviews, setReviews] = useState<Review[]>(SEED_REVIEWS);
   const [hydrated, setHydrated] = useState(false);
+  const [lastAddedAt, setLastAddedAt] = useState(0);
 
   useEffect(() => {
     try {
       const c = localStorage.getItem(CART_KEY);
       const w = localStorage.getItem(WISH_KEY);
       const r = localStorage.getItem(REVIEWS_KEY);
-      if (c) setCart(JSON.parse(c));
+      if (c) {
+        const parsed: CartItem[] = JSON.parse(c);
+        // Drop any items whose product no longer exists in the catalogue
+        setCart(parsed.filter((i) => !!getProduct(i.slug) && i.qty > 0));
+      }
       if (w) setWishlist(JSON.parse(w));
       if (r) setReviews(JSON.parse(r));
     } catch {}
@@ -95,6 +101,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       wishlist,
       reviews,
       cartCount: cart.reduce((n, i) => n + i.qty, 0),
+      lastAddedAt,
       addToCart: (product, size) => {
         setCart((prev) => {
           const i = prev.findIndex((c) => c.slug === product.slug && c.size === size);
@@ -105,6 +112,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           }
           return [...prev, { slug: product.slug, size, qty: 1 }];
         });
+        setLastAddedAt(Date.now());
       },
       removeFromCart: (slug, size) =>
         setCart((prev) => prev.filter((c) => !(c.slug === slug && c.size === size))),
@@ -130,7 +138,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return DEMO_ORDERS.find((o) => o.id === trimmed) ?? null;
       },
     }),
-    [cart, wishlist, reviews],
+    [cart, wishlist, reviews, lastAddedAt],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
