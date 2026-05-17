@@ -223,5 +223,3 @@ function ProductPage() {
     </div>
   );
 }
-
-}
