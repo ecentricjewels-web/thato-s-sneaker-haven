@@ -1,14 +1,22 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Search, ShoppingBag, Heart, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { Search, ShoppingBag, Heart, Menu, X, Check } from "lucide-react";
+import { useEffect, useState } from "react";
 import { brands } from "@/lib/products";
 import { useStore } from "@/lib/store";
 
 export function Header() {
-  const { cartCount, wishlist } = useStore();
+  const { cartCount, wishlist, lastAddedAt } = useStore();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
+  const [flash, setFlash] = useState(false);
+
+  useEffect(() => {
+    if (!lastAddedAt) return;
+    setFlash(true);
+    const t = setTimeout(() => setFlash(false), 2200);
+    return () => clearTimeout(t);
+  }, [lastAddedAt]);
 
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,14 +42,24 @@ export function Header() {
           {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </button>
 
-        <form onSubmit={submitSearch} className="relative flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search sneakers, brands, colourways"
-            className="h-10 w-full rounded-sm border border-border bg-surface pl-10 pr-4 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none"
-          />
+        <form onSubmit={submitSearch} className="relative flex flex-1 items-center gap-2">
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search sneakers, brands, colourways"
+              className="h-10 w-full rounded-sm border border-border bg-surface pl-10 pr-4 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+            />
+          </div>
+          <button
+            type="submit"
+            aria-label="Search"
+            className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-sm bg-foreground px-3 text-xs font-semibold uppercase tracking-[0.16em] text-background transition hover:opacity-90"
+          >
+            <Search className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Search</span>
+          </button>
         </form>
 
         <nav className="ml-auto hidden items-center gap-1 md:flex">
