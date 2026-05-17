@@ -139,3 +139,17 @@ export function Header() {
     </header>
   );
 }
+
+function AddedPopup() {
+  return (
+    <div
+      role="status"
+      className="pointer-events-none absolute right-0 top-[calc(100%+8px)] z-50 flex items-center gap-2 whitespace-nowrap rounded-sm border border-primary/40 bg-card px-3 py-2 text-xs font-medium text-foreground shadow-lg animate-in fade-in slide-in-from-top-1"
+    >
+      <span className="grid h-5 w-5 place-items-center rounded-full bg-primary text-primary-foreground">
+        <Check className="h-3 w-3" />
+      </span>
+      Added to bag — tap to view
+    </div>
+  );
+}
