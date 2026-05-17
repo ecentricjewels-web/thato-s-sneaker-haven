@@ -65,7 +65,7 @@ function About() {
           {[
             { n: "01", h: "Browse the catalogue", p: "Filter by brand, pick a colourway, see one clear price in rands.", icon: ShieldCheck },
             { n: "02", h: "Add to bag & checkout", p: "Choose your size, add to bag and pay securely. No bidding, no waiting.", icon: Truck },
-            { n: "03", h: "Shipped from JHB", p: "Tracked nationwide delivery in 2–4 working days. Free over R2 800.", icon: RefreshCw },
+            { n: "03", h: "Shipped from JHB", p: "Tracked nationwide delivery. Free over R2 800.", icon: RefreshCw },
           ].map((s) => (
             <div key={s.n} className="bg-background p-8">
               <div className="font-mono text-sm text-primary">{s.n}</div>
