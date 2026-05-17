@@ -72,10 +72,13 @@ export function Header() {
               <span className="absolute -right-0.5 -top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground">{wishlist.length}</span>
             )}
           </Link>
-          <Link to="/bag" className="relative inline-flex h-9 items-center gap-2 rounded-sm bg-primary px-3 text-sm font-medium text-primary-foreground transition hover:opacity-90">
-            <ShoppingBag className="h-4 w-4" />
-            Bag · {cartCount}
-          </Link>
+          <div className="relative">
+            <Link to="/bag" className="relative inline-flex h-9 items-center gap-2 rounded-sm bg-primary px-3 text-sm font-medium text-primary-foreground transition hover:opacity-90">
+              <ShoppingBag className="h-4 w-4" />
+              Bag · {cartCount}
+            </Link>
+            {flash && <AddedPopup />}
+          </div>
         </nav>
 
         {/* Mobile bag + wishlist quick access */}
@@ -86,9 +89,12 @@ export function Header() {
               <span className="absolute right-0 top-0 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground">{wishlist.length}</span>
             )}
           </Link>
-          <Link to="/bag" className="relative inline-flex h-9 items-center gap-1.5 rounded-sm bg-primary px-2.5 text-xs font-medium text-primary-foreground">
-            <ShoppingBag className="h-3.5 w-3.5" /> {cartCount}
-          </Link>
+          <div className="relative">
+            <Link to="/bag" className="relative inline-flex h-9 items-center gap-1.5 rounded-sm bg-primary px-2.5 text-xs font-medium text-primary-foreground">
+              <ShoppingBag className="h-3.5 w-3.5" /> {cartCount}
+            </Link>
+            {flash && <AddedPopup />}
+          </div>
         </div>
       </div>
 
