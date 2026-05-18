@@ -3,7 +3,8 @@ import { useMemo, useState } from "react";
 import { Header } from "@/components/storefront/Header";
 import { Footer } from "@/components/storefront/Footer";
 import { ProductCard } from "@/components/storefront/ProductCard";
-import { brands, products, type Brand } from "@/lib/products";
+import { brands, type Brand } from "@/lib/products";
+import { useProducts } from "@/lib/products-context";
 import { z } from "zod";
 
 const searchSchema = z.object({
@@ -32,11 +33,12 @@ function Shop() {
   const [sort, setSort] = useState<"featured" | "price-asc" | "price-desc" | "newest">(
     "featured",
   );
+  const { allProducts } = useProducts();
 
   const query = (q ?? "").trim().toLowerCase();
 
   const filtered = useMemo(() => {
-    let list = brand === "All" ? products : products.filter((p) => p.brand === brand);
+    let list = brand === "All" ? allProducts : allProducts.filter((p) => p.brand === brand);
     if (query) {
       list = list.filter((p) =>
         [p.name, p.brand, p.colorway, p.category].join(" ").toLowerCase().includes(query),
@@ -55,7 +57,7 @@ function Shop() {
         break;
     }
     return list;
-  }, [brand, sort, query]);
+  }, [brand, sort, query, allProducts]);
 
   return (
     <div className="min-h-screen bg-background">
