@@ -11,7 +11,6 @@ import {
 import appCss from "../styles.css?url";
 import { StoreProvider } from "@/lib/store";
 import { ProductsProvider } from "@/lib/products-context";
-import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "sonner";
 
 function NotFoundComponent() {
@@ -91,6 +90,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Thato's Storefront — Authenticated Sneakers" },
+      { name: "description", content: "Thato's Sneaker Haven is an e-commerce platform for buying sneakers." },
+      { property: "og:description", content: "Thato's Sneaker Haven is an e-commerce platform for buying sneakers." },
+      { name: "twitter:description", content: "Thato's Sneaker Haven is an e-commerce platform for buying sneakers." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/878eeeb5-88c0-495f-9cce-49741d029776/id-preview-b53600cc--8bac43c5-5adf-405b-9bb4-2a68b4928948.lovable.app-1780309689624.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/878eeeb5-88c0-495f-9cce-49741d029776/id-preview-b53600cc--8bac43c5-5adf-405b-9bb4-2a68b4928948.lovable.app-1780309689624.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -131,14 +136,12 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ProductsProvider>
-          <StoreProvider>
-            <Outlet />
-            <Toaster richColors position="top-right" />
-          </StoreProvider>
-        </ProductsProvider>
-      </AuthProvider>
+      <ProductsProvider>
+        <StoreProvider>
+          <Outlet />
+          <Toaster richColors position="top-right" />
+        </StoreProvider>
+      </ProductsProvider>
     </QueryClientProvider>
   );
 }
