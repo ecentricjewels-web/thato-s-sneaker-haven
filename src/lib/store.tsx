@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { toast } from "sonner";
 import { getProduct, type Product } from "./products";
+import { supabase } from "@/integrations/supabase/client";
 
 export type CartItem = {
   slug: string;
@@ -26,8 +28,8 @@ export type OrderStatus =
 export type Order = {
   id: string;
   status: OrderStatus;
-  updatedAt: string; // ISO
-  createdAt: string; // ISO
+  updatedAt: string;
+  createdAt: string;
   itemName: string;
   size: string;
   note?: string;
@@ -39,11 +41,12 @@ type StoreCtx = {
   reviews: Review[];
   cartCount: number;
   lastAddedAt: number;
+  wishlistRequiresAuth: boolean;
   addToCart: (product: Product, size: string) => void;
   removeFromCart: (slug: string, size: string) => void;
   updateQty: (slug: string, size: string, qty: number) => void;
   clearCart: () => void;
-  toggleWishlist: (slug: string) => void;
+  toggleWishlist: (slug: string) => Promise<void>;
   isWishlisted: (slug: string) => boolean;
   addReview: (r: Omit<Review, "id" | "date">) => void;
   findOrder: (id: string) => Order | null;
@@ -52,7 +55,6 @@ type StoreCtx = {
 const Ctx = createContext<StoreCtx | null>(null);
 
 const CART_KEY = "thato:cart";
-const WISH_KEY = "thato:wishlist";
 const REVIEWS_KEY = "thato:reviews";
 
 const SEED_REVIEWS: Review[] = [
@@ -74,26 +76,39 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [reviews, setReviews] = useState<Review[]>(SEED_REVIEWS);
   const [hydrated, setHydrated] = useState(false);
   const [lastAddedAt, setLastAddedAt] = useState(0);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     try {
       const c = localStorage.getItem(CART_KEY);
-      const w = localStorage.getItem(WISH_KEY);
       const r = localStorage.getItem(REVIEWS_KEY);
       if (c) {
         const parsed: CartItem[] = JSON.parse(c);
-        // Drop any items whose product no longer exists in the catalogue
         setCart(parsed.filter((i) => !!getProduct(i.slug) && i.qty > 0));
       }
-      if (w) setWishlist(JSON.parse(w));
       if (r) setReviews(JSON.parse(r));
     } catch {}
     setHydrated(true);
   }, []);
 
   useEffect(() => { if (hydrated) localStorage.setItem(CART_KEY, JSON.stringify(cart)); }, [cart, hydrated]);
-  useEffect(() => { if (hydrated) localStorage.setItem(WISH_KEY, JSON.stringify(wishlist)); }, [wishlist, hydrated]);
   useEffect(() => { if (hydrated) localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews)); }, [reviews, hydrated]);
+
+  // Sync wishlist from DB when signed in
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUserId(session?.user?.id ?? null);
+    });
+    supabase.auth.getSession().then(({ data }) => setUserId(data.session?.user?.id ?? null));
+    return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!userId) { setWishlist([]); return; }
+    supabase.from("wishlists").select("product_slug").eq("user_id", userId).then(({ data }) => {
+      if (data) setWishlist(data.map((r) => r.product_slug));
+    });
+  }, [userId]);
 
   const value = useMemo<StoreCtx>(
     () => ({
@@ -102,6 +117,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       reviews,
       cartCount: cart.reduce((n, i) => n + i.qty, 0),
       lastAddedAt,
+      wishlistRequiresAuth: !userId,
       addToCart: (product, size) => {
         setCart((prev) => {
           const i = prev.findIndex((c) => c.slug === product.slug && c.size === size);
@@ -123,10 +139,24 @@ export function StoreProvider({ children }: { children: ReactNode }) {
             .filter((c) => c.qty > 0),
         ),
       clearCart: () => setCart([]),
-      toggleWishlist: (slug) =>
-        setWishlist((prev) =>
-          prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
-        ),
+      toggleWishlist: async (slug) => {
+        if (!userId) {
+          toast.error("Sign in to save sneakers to your wishlist.", {
+            action: { label: "Sign in", onClick: () => { window.location.href = "/admin/login"; } },
+          });
+          return;
+        }
+        const has = wishlist.includes(slug);
+        if (has) {
+          setWishlist((p) => p.filter((s) => s !== slug));
+          const { error } = await supabase.from("wishlists").delete().eq("user_id", userId).eq("product_slug", slug);
+          if (error) { toast.error(error.message); setWishlist((p) => [...p, slug]); }
+        } else {
+          setWishlist((p) => [...p, slug]);
+          const { error } = await supabase.from("wishlists").insert({ user_id: userId, product_slug: slug });
+          if (error) { toast.error(error.message); setWishlist((p) => p.filter((s) => s !== slug)); }
+        }
+      },
       isWishlisted: (slug) => wishlist.includes(slug),
       addReview: (r) =>
         setReviews((prev) => [
@@ -138,7 +168,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return DEMO_ORDERS.find((o) => o.id === trimmed) ?? null;
       },
     }),
-    [cart, wishlist, reviews, lastAddedAt],
+    [cart, wishlist, reviews, lastAddedAt, userId],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
