@@ -48,7 +48,7 @@ export const products: Product[] = [
   { slug: "nike-shox-tl-white", name: "Nike Shox TL", brand: "Nike", colorway: "Triple White", image: shoxWhite, price: 1999, category: "Running", sizes: SIZE_3_10, inStock: true },
   { slug: "nike-airmax-95-cool-grey", name: "Nike Air Max 95", brand: "Nike", colorway: "Cool Grey / University Blue", image: am95, price: 2099, category: "Lifestyle", sizes: SIZE_3_10, inStock: true },
   { slug: "nike-tn-black-metallic-silver", name: "Nike Air Max Plus TN", brand: "Nike", colorway: "Black Metallic Silver", image: tnBlackSilver, price: 1899, category: "Lifestyle", sizes: SIZE_3_9, inStock: true },
-  { slug: "new-balance-530", name: "New Balance 530", brand: "New Balance", colorway: "White / Silver", image: nb530, price: 1600, category: "Lifestyle", sizes: SIZE_3_10, isNew: true, inStock: true },
+  { slug: "new-balance-530", name: "New Balance 530", brand: "New Balance", colorway: "White / Silver", image: nb530, price: 1600, category: "Lifestyle", sizes: SIZE_3_10, isNew: false, inStock: true },
   { slug: "nike-p6000-silver", name: "Nike P-6000", brand: "Nike", colorway: "Silver", image: p6000, price: 1699, category: "Lifestyle", sizes: SIZE_6_10, inStock: true },
   { slug: "puma-suede-xl-black", name: "Puma Suede XL", brand: "Puma", colorway: "Black", image: pumaBlack, price: 1299, category: "Lifestyle", sizes: SIZE_3_9, inStock: true },
   { slug: "adidas-campus-grey", name: "Adidas Campus 00s", brand: "Adidas", colorway: "Grey", image: campusGrey, price: 1250, category: "Lifestyle", sizes: SIZE_3_10, inStock: true },
@@ -56,14 +56,14 @@ export const products: Product[] = [
   // Rest of catalogue
   { slug: "nike-shox-tl-silver", name: "Nike Shox TL", brand: "Nike", colorway: "Metallic Silver", image: shoxSilver, price: 1999, category: "Running", sizes: SIZE_3_10, inStock: true },
   { slug: "nike-tn-white", name: "Nike Air Max Plus TN", brand: "Nike", colorway: "Triple White", image: tnWhite, price: 1899, category: "Lifestyle", sizes: SIZE_3_9, inStock: true },
-  { slug: "nike-tn-pink-rise", name: "Nike Air Max Plus TN", brand: "Nike", colorway: "Pink Rise", image: tnPink, price: 1899, category: "Lifestyle", sizes: SIZE_3_6, isNew: true, inStock: true },
+  { slug: "nike-tn-pink-rise", name: "Nike Air Max Plus TN", brand: "Nike", colorway: "Pink Rise", image: tnPink, price: 1899, category: "Lifestyle", sizes: SIZE_3_6, isNew: false, inStock: true },
   { slug: "nike-air-force-1-black", name: "Nike Air Force 1 Low", brand: "Nike", colorway: "Triple Black", image: af1Black, price: 1400, category: "Lifestyle", sizes: SIZE_3_10, inStock: true },
   { slug: "nike-air-force-1-white", name: "Nike Air Force 1 Low", brand: "Nike", colorway: "Triple White", image: af1White, price: 1400, category: "Lifestyle", sizes: SIZE_3_10, inStock: true },
 
   { slug: "jordan-4-fire-red", name: "Air Jordan 4 Retro", brand: "Jordan", colorway: "Fire Red", image: j4Fire, price: 1599, category: "Basketball", sizes: SIZE_3_10, inStock: true },
   { slug: "jordan-4-pine-green", name: "Air Jordan 4 Retro", brand: "Jordan", colorway: "Pine Green", image: j4Pine, price: 1599, category: "Basketball", sizes: SIZE_3_10, inStock: true },
   { slug: "jordan-4-black-cat", name: "Air Jordan 4 Retro", brand: "Jordan", colorway: "Black Cat", image: j4BlackCat, price: 1599, category: "Basketball", sizes: SIZE_3_10, inStock: true },
-  { slug: "jordan-4-military-black", name: "Air Jordan 4 Retro", brand: "Jordan", colorway: "Military Black", image: j4Military, price: 1599, category: "Basketball", sizes: SIZE_3_10, isNew: true, inStock: true },
+  { slug: "jordan-4-military-black", name: "Air Jordan 4 Retro", brand: "Jordan", colorway: "Military Black", image: j4Military, price: 1599, category: "Basketball", sizes: SIZE_3_10, isNew: false, inStock: true },
 
   { slug: "adidas-campus-black", name: "Adidas Campus 00s", brand: "Adidas", colorway: "Core Black", image: campusBlack, price: 1250, category: "Lifestyle", sizes: SIZE_3_10, inStock: true },
 

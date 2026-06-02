@@ -11,6 +11,7 @@ import {
 import appCss from "../styles.css?url";
 import { StoreProvider } from "@/lib/store";
 import { ProductsProvider } from "@/lib/products-context";
+import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "sonner";
 
 function NotFoundComponent() {
@@ -136,12 +137,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ProductsProvider>
-        <StoreProvider>
-          <Outlet />
-          <Toaster richColors position="top-right" />
-        </StoreProvider>
-      </ProductsProvider>
+      <AuthProvider>
+        <ProductsProvider>
+          <StoreProvider>
+            <Outlet />
+            <Toaster richColors position="top-right" />
+          </StoreProvider>
+        </ProductsProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
