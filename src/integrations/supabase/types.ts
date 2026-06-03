@@ -172,6 +172,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_order_by_reference: {
+        Args: { _reference: string }
+        Returns: {
+          created_at: string
+          items: Json
+          reference: string
+          shipping_cost: number
+          shipping_label: string
+          status: Database["public"]["Enums"]["order_status"]
+          subtotal: number
+          total: number
+          updated_at: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
