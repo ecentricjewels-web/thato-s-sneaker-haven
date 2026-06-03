@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Search, ShoppingBag, Heart, Menu, X, Check } from "lucide-react";
+import { Search, ShoppingBag, Menu, X, Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { brands } from "@/lib/products";
 import { useStore } from "@/lib/store";
 
 export function Header() {
-  const { cartCount, wishlist, lastAddedAt } = useStore();
+  const { cartCount, lastAddedAt } = useStore();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
@@ -66,12 +66,6 @@ export function Header() {
           <Link to="/" className="rounded-sm px-3 py-2 text-sm text-muted-foreground transition hover:text-foreground" activeOptions={{ exact: true }} activeProps={{ className: "text-foreground" }}>Home</Link>
           <Link to="/shop" className="rounded-sm px-3 py-2 text-sm text-muted-foreground transition hover:text-foreground" activeProps={{ className: "text-foreground" }}>Shop</Link>
           <Link to="/about" className="rounded-sm px-3 py-2 text-sm text-muted-foreground transition hover:text-foreground" activeProps={{ className: "text-foreground" }}>About</Link>
-          <Link to="/wishlist" className="relative inline-flex h-9 w-9 items-center justify-center rounded-sm text-muted-foreground hover:text-foreground" aria-label="Wishlist" activeProps={{ className: "text-foreground" }}>
-            <Heart className="h-4 w-4" />
-            {wishlist.length > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground">{wishlist.length}</span>
-            )}
-          </Link>
           <div className="relative">
             <Link to="/bag" className="relative inline-flex h-9 items-center gap-2 rounded-sm bg-primary px-3 text-sm font-medium text-primary-foreground transition hover:opacity-90">
               <ShoppingBag className="h-4 w-4" />
@@ -81,14 +75,8 @@ export function Header() {
           </div>
         </nav>
 
-        {/* Mobile bag + wishlist quick access */}
+        {/* Mobile bag quick access */}
         <div className="flex items-center gap-1 md:hidden">
-          <Link to="/wishlist" className="relative grid h-9 w-9 place-items-center rounded-sm text-muted-foreground" aria-label="Wishlist">
-            <Heart className="h-4 w-4" />
-            {wishlist.length > 0 && (
-              <span className="absolute right-0 top-0 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground">{wishlist.length}</span>
-            )}
-          </Link>
           <div className="relative">
             <Link to="/bag" className="relative inline-flex h-9 items-center gap-1.5 rounded-sm bg-primary px-2.5 text-xs font-medium text-primary-foreground">
               <ShoppingBag className="h-3.5 w-3.5" /> {cartCount}
@@ -106,7 +94,6 @@ export function Header() {
               { to: "/", label: "Home", exact: true },
               { to: "/shop", label: "Shop" },
               { to: "/about", label: "About" },
-              { to: "/wishlist", label: "Wishlist" },
               { to: "/track-order", label: "Track order" },
               { to: "/shipping", label: "Shipping" },
               { to: "/contact", label: "Contact" },
