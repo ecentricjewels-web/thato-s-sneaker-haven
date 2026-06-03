@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Package, ShoppingBag, Heart, LogOut, Plus, Trash2, Upload, Pencil, X } from "lucide-react";
+import { Package, ShoppingBag, LogOut, Plus, Trash2, Upload, Pencil, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { formatPrice } from "@/lib/products";
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/admin/")({
 function AdminDashboard() {
   const { user, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"orders" | "products" | "wishlists">("orders");
+  const [tab, setTab] = useState<"orders" | "products">("orders");
 
   useEffect(() => {
     if (loading) return;
@@ -68,7 +68,6 @@ function AdminDashboard() {
           {[
             { id: "orders", label: "Orders", Icon: ShoppingBag },
             { id: "products", label: "Products", Icon: Package },
-            { id: "wishlists", label: "Wishlists", Icon: Heart },
           ].map(({ id, label, Icon }) => (
             <button key={id} onClick={() => setTab(id as typeof tab)}
               className={`-mb-px inline-flex items-center gap-2 border-b-2 px-4 py-3 text-sm ${
@@ -82,7 +81,6 @@ function AdminDashboard() {
       <main className="mx-auto max-w-[1400px] px-4 py-8">
         {tab === "orders" && <OrdersTab />}
         {tab === "products" && <ProductsTab />}
-        {tab === "wishlists" && <WishlistsTab />}
       </main>
     </div>
   );
@@ -405,50 +403,3 @@ function Checkbox({ label, checked, onChange }: { label: string; checked: boolea
   );
 }
 
-// ───── Wishlists ─────
-function WishlistsTab() {
-  const { data: rows = [], isLoading } = useQuery({
-    queryKey: ["admin-wishlists"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("wishlists")
-        .select("id, user_id, product_slug, created_at")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  const byUser = useMemo(() => {
-    const m = new Map<string, { product_slug: string; created_at: string }[]>();
-    rows.forEach((r) => {
-      const list = m.get(r.user_id) ?? [];
-      list.push({ product_slug: r.product_slug, created_at: r.created_at });
-      m.set(r.user_id, list);
-    });
-    return Array.from(m.entries());
-  }, [rows]);
-
-  if (isLoading) return <p className="text-sm text-muted-foreground">Loading wishlists…</p>;
-  if (byUser.length === 0) return <p className="text-sm text-muted-foreground">No one has saved anything yet. Signed-in shoppers' wishlists appear here.</p>;
-
-  return (
-    <div className="space-y-4">
-      {byUser.map(([userId, items]) => (
-        <div key={userId} className="rounded-sm border border-border bg-card p-5">
-          <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Shopper</div>
-          <div className="font-mono text-xs">{userId}</div>
-          <div className="text-xs text-muted-foreground">{items.length} saved item{items.length === 1 ? "" : "s"}</div>
-          <ul className="mt-3 grid gap-1 text-sm">
-            {items.map((it, i) => (
-              <li key={i} className="flex items-center justify-between border-t border-border pt-2 first:border-t-0 first:pt-0">
-                <span>{it.product_slug}</span>
-                <span className="text-xs text-muted-foreground">{new Date(it.created_at).toLocaleString()}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-  );
-}
