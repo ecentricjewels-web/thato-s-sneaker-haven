@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as TrackOrderRouteImport } from './routes/track-order'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ShippingRouteImport } from './routes/shipping'
@@ -21,11 +20,6 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
-const WishlistRoute = WishlistRouteImport.update({
-  id: '/wishlist',
-  path: '/wishlist',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TrackOrderRoute = TrackOrderRouteImport.update({
   id: '/track-order',
   path: '/track-order',
@@ -85,7 +79,6 @@ export interface FileRoutesByFullPath {
   '/shipping': typeof ShippingRoute
   '/shop': typeof ShopRoute
   '/track-order': typeof TrackOrderRoute
-  '/wishlist': typeof WishlistRoute
   '/admin/login': typeof AdminLoginRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -98,7 +91,6 @@ export interface FileRoutesByTo {
   '/shipping': typeof ShippingRoute
   '/shop': typeof ShopRoute
   '/track-order': typeof TrackOrderRoute
-  '/wishlist': typeof WishlistRoute
   '/admin/login': typeof AdminLoginRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -112,7 +104,6 @@ export interface FileRoutesById {
   '/shipping': typeof ShippingRoute
   '/shop': typeof ShopRoute
   '/track-order': typeof TrackOrderRoute
-  '/wishlist': typeof WishlistRoute
   '/admin/login': typeof AdminLoginRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -127,7 +118,6 @@ export interface FileRouteTypes {
     | '/shipping'
     | '/shop'
     | '/track-order'
-    | '/wishlist'
     | '/admin/login'
     | '/product/$slug'
     | '/admin/'
@@ -140,7 +130,6 @@ export interface FileRouteTypes {
     | '/shipping'
     | '/shop'
     | '/track-order'
-    | '/wishlist'
     | '/admin/login'
     | '/product/$slug'
     | '/admin'
@@ -153,7 +142,6 @@ export interface FileRouteTypes {
     | '/shipping'
     | '/shop'
     | '/track-order'
-    | '/wishlist'
     | '/admin/login'
     | '/product/$slug'
     | '/admin/'
@@ -167,7 +155,6 @@ export interface RootRouteChildren {
   ShippingRoute: typeof ShippingRoute
   ShopRoute: typeof ShopRoute
   TrackOrderRoute: typeof TrackOrderRoute
-  WishlistRoute: typeof WishlistRoute
   AdminLoginRoute: typeof AdminLoginRoute
   ProductSlugRoute: typeof ProductSlugRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -175,13 +162,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/wishlist': {
-      id: '/wishlist'
-      path: '/wishlist'
-      fullPath: '/wishlist'
-      preLoaderRoute: typeof WishlistRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/track-order': {
       id: '/track-order'
       path: '/track-order'
@@ -263,7 +243,6 @@ const rootRouteChildren: RootRouteChildren = {
   ShippingRoute: ShippingRoute,
   ShopRoute: ShopRoute,
   TrackOrderRoute: TrackOrderRoute,
-  WishlistRoute: WishlistRoute,
   AdminLoginRoute: AdminLoginRoute,
   ProductSlugRoute: ProductSlugRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -271,3 +250,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
