@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Heart, ShoppingBag } from "lucide-react";
+import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { Header } from "@/components/storefront/Header";
 import { Footer } from "@/components/storefront/Footer";
 import { formatPrice, getProduct, getColorways, products } from "@/lib/products";
@@ -51,8 +51,7 @@ function ProductPage() {
   const { product } = Route.useLoaderData();
   const [size, setSize] = useState<string | null>(null);
   const colorways = getColorways(product);
-  const { addToCart, toggleWishlist, isWishlisted } = useStore();
-  const saved = isWishlisted(product.slug);
+  const { addToCart } = useStore();
   const related = products
     .filter((p) => p.brand === product.brand && p.name !== product.name)
     .slice(0, 4);
@@ -157,7 +156,7 @@ function ProductPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto]">
+          <div>
             <button
               disabled={!size}
               onClick={() => size && addToCart(product, size)}
@@ -165,17 +164,6 @@ function ProductPage() {
             >
               <ShoppingBag className="h-4 w-4" />
               {size ? `Add to bag — Size ${size}` : "Select a size"}
-            </button>
-            <button
-              onClick={() => toggleWishlist(product.slug)}
-              className={`inline-flex items-center justify-center gap-2 rounded-sm border px-5 py-4 text-sm font-medium transition ${
-                saved
-                  ? "border-primary bg-primary/10 text-primary"
-                  : "border-border-strong bg-surface hover:border-primary"
-              }`}
-            >
-              <Heart className={`h-4 w-4 ${saved ? "fill-primary" : ""}`} />
-              {saved ? "Saved" : "Save"}
             </button>
           </div>
 

@@ -23,7 +23,6 @@ const COLS: { h: string; l: { label: string; to: string; search?: Record<string,
     h: "Storefront",
     l: [
       { label: "About Thato", to: "/about" },
-      { label: "Wishlist", to: "/wishlist" },
       { label: "Shop all", to: "/shop" },
     ],
   },

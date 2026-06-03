@@ -1,12 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Heart } from "lucide-react";
 import { formatPrice, getColorways, type Product } from "@/lib/products";
-import { useStore } from "@/lib/store";
 
 export function ProductCard({ product }: { product: Product }) {
   const colorwayCount = getColorways(product).length;
-  const { isWishlisted, toggleWishlist } = useStore();
-  const saved = isWishlisted(product.slug);
 
   return (
     <Link
@@ -31,17 +27,6 @@ export function ProductCard({ product }: { product: Product }) {
         <span className="absolute right-3 top-3 rounded-sm bg-background/80 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground backdrop-blur">
           {product.brand}
         </span>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleWishlist(product.slug);
-          }}
-          aria-label={saved ? "Remove from wishlist" : "Save to wishlist"}
-          className="absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full border border-border bg-background/80 text-foreground backdrop-blur transition hover:border-primary"
-        >
-          <Heart className={`h-4 w-4 ${saved ? "fill-primary text-primary" : ""}`} />
-        </button>
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">
         <div className="line-clamp-1 text-sm font-medium">{product.name}</div>
