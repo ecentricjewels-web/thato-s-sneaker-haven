@@ -141,7 +141,7 @@ function RootComponent() {
         <ProductsProvider>
           <StoreProvider>
             <Outlet />
-            <Toaster richColors position="top-right" />
+            <Toaster richColors position="top-center" duration={2000} />
           </StoreProvider>
         </ProductsProvider>
       </AuthProvider>
