@@ -85,7 +85,10 @@ function BagPage() {
     if (!canCheckout || !selectedOption) return;
     setSubmitting(true);
 
+    const reference = (crypto.randomUUID?.() ?? Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)).replace(/-/g, "").slice(0, 8).toUpperCase();
+
     const payload = {
+      reference,
       customer_first_name: firstName.trim(),
       customer_last_name: lastName.trim(),
       customer_phone: phone.trim(),
@@ -107,11 +110,11 @@ function BagPage() {
       notes: notes.trim() || null,
     };
 
-    const { data, error } = await supabase.from("orders").insert(payload).select("reference").single();
+    const { error } = await supabase.from("orders").insert(payload);
     setSubmitting(false);
     if (error) { toast.error("Couldn't save your order: " + error.message); return; }
 
-    setOrderRef(data.reference);
+    setOrderRef(reference);
     setPlaced(true);
     clearCart();
   };
