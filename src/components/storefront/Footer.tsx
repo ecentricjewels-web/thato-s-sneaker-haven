@@ -69,8 +69,7 @@ export function Footer() {
       </div>
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-4 px-4 py-5 text-xs text-muted-foreground">
-          <span>© {new Date().getFullYear()} Thato's Storefront. All rights reserved.</span>
-          <span>Johannesburg ↔ Nationwide</span>
+          <span>© {new Date().getFullYear()} Thato x StockX</span>
         </div>
       </div>
     </footer>
