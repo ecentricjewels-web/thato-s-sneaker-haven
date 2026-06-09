@@ -14,7 +14,7 @@ export function Header() {
   useEffect(() => {
     if (!lastAddedAt) return;
     setFlash(true);
-    const t = setTimeout(() => setFlash(false), 2200);
+    const t = setTimeout(() => setFlash(false), 1200);
     return () => clearTimeout(t);
   }, [lastAddedAt]);
 
@@ -26,6 +26,7 @@ export function Header() {
   };
 
   return (
+    <>
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="border-b border-border/60 bg-surface">
         <div className="mx-auto flex h-9 max-w-[1400px] items-center justify-center px-4 text-center text-[10px] uppercase tracking-[0.18em] text-muted-foreground sm:text-[11px]">
@@ -71,7 +72,6 @@ export function Header() {
               <ShoppingBag className="h-4 w-4" />
               Bag · {cartCount}
             </Link>
-            {flash && <AddedPopup />}
           </div>
         </nav>
 
@@ -81,7 +81,6 @@ export function Header() {
             <Link to="/bag" className="relative inline-flex h-9 items-center gap-1.5 rounded-sm bg-primary px-2.5 text-xs font-medium text-primary-foreground">
               <ShoppingBag className="h-3.5 w-3.5" /> {cartCount}
             </Link>
-            {flash && <AddedPopup />}
           </div>
         </div>
       </div>
@@ -124,6 +123,8 @@ export function Header() {
         </div>
       </div>
     </header>
+    {flash && <AddedPopup />}
+    </>
   );
 }
 
@@ -131,12 +132,14 @@ function AddedPopup() {
   return (
     <div
       role="status"
-      className="pointer-events-none absolute right-0 top-[calc(100%+8px)] z-50 flex items-center gap-2 whitespace-nowrap rounded-sm border border-primary/40 bg-card px-3 py-2 text-xs font-medium text-foreground shadow-lg animate-in fade-in slide-in-from-top-1"
+      className="pointer-events-none fixed inset-0 z-[60] flex items-center justify-center"
     >
-      <span className="grid h-5 w-5 place-items-center rounded-full bg-primary text-primary-foreground">
-        <Check className="h-3 w-3" />
-      </span>
-      Added to bag — tap to view
+      <div className="flex items-center gap-2 rounded-md border border-primary/40 bg-card px-5 py-3 text-sm font-medium text-foreground shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+        <span className="grid h-6 w-6 place-items-center rounded-full bg-primary text-primary-foreground">
+          <Check className="h-3.5 w-3.5" />
+        </span>
+        Added to bag
+      </div>
     </div>
   );
 }
