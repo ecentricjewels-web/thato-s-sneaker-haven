@@ -122,6 +122,8 @@ export function Header() {
         </div>
       </div>
     </header>
+    {flash && <AddedPopup />}
+    </>
   );
 }
 
@@ -129,12 +131,14 @@ function AddedPopup() {
   return (
     <div
       role="status"
-      className="pointer-events-none absolute right-0 top-[calc(100%+8px)] z-50 flex items-center gap-2 whitespace-nowrap rounded-sm border border-primary/40 bg-card px-3 py-2 text-xs font-medium text-foreground shadow-lg animate-in fade-in slide-in-from-top-1"
+      className="pointer-events-none fixed inset-0 z-[60] flex items-center justify-center"
     >
-      <span className="grid h-5 w-5 place-items-center rounded-full bg-primary text-primary-foreground">
-        <Check className="h-3 w-3" />
-      </span>
-      Added to bag — tap to view
+      <div className="flex items-center gap-2 rounded-md border border-primary/40 bg-card px-5 py-3 text-sm font-medium text-foreground shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+        <span className="grid h-6 w-6 place-items-center rounded-full bg-primary text-primary-foreground">
+          <Check className="h-3.5 w-3.5" />
+        </span>
+        Added to bag
+      </div>
     </div>
   );
 }
