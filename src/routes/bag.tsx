@@ -112,11 +112,30 @@ function BagPage() {
 
     const { error } = await supabase.from("orders").insert(payload);
     setSubmitting(false);
-    if (error) { toast.error("Couldn't save your order: " + error.message); return; }
+    if (error) {
+      const raw = (error.message || "").toLowerCase();
+      let friendly = "Something went wrong placing your order. Please try again.";
+      if (raw.includes("row-level security") || raw.includes("permission")) {
+        friendly = "We couldn't submit your order right now. Please refresh the page and try again — if it keeps happening, message Thato on WhatsApp.";
+      } else if (raw.includes("subtotal mismatch") || raw.includes("total mismatch")) {
+        friendly = "Your bag total looks out of date. Please refresh the page and try again.";
+      } else if (raw.includes("missing price")) {
+        friendly = "One of the items in your bag is unavailable. Please remove it and try again.";
+      } else if (raw.includes("invalid item") || raw.includes("must contain at least one item")) {
+        friendly = "Your bag is empty or contains an invalid item. Please review and try again.";
+      } else if (raw.includes("invalid shipping")) {
+        friendly = "Please pick a valid shipping option and try again.";
+      } else if (raw.includes("network") || raw.includes("failed to fetch")) {
+        friendly = "Connection issue. Check your internet and try again.";
+      }
+      toast.error(friendly);
+      return;
+    }
 
     setOrderRef(reference);
     setPlaced(true);
     clearCart();
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (placed) {
