@@ -26,6 +26,7 @@ export function Header() {
   };
 
   return (
+    <>
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="border-b border-border/60 bg-surface">
         <div className="mx-auto flex h-9 max-w-[1400px] items-center justify-center px-4 text-center text-[10px] uppercase tracking-[0.18em] text-muted-foreground sm:text-[11px]">
