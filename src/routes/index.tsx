@@ -40,9 +40,6 @@ function Home() {
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30" />
         <div className="relative mx-auto grid max-w-[1400px] gap-12 px-4 py-24 md:grid-cols-2 md:py-36">
           <div className="flex flex-col justify-center gap-6">
-            <span className="inline-flex w-fit items-center gap-2 rounded-sm border border-primary/40 bg-primary/10 px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-primary">
-              Thato's Storefront
-            </span>
             <h1 className="font-display text-5xl font-bold leading-[0.95] md:text-7xl">
               The Marketplace<br />for Sneaker Lovers<span className="text-primary">.</span>
             </h1>
