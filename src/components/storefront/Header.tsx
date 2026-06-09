@@ -14,7 +14,7 @@ export function Header() {
   useEffect(() => {
     if (!lastAddedAt) return;
     setFlash(true);
-    const t = setTimeout(() => setFlash(false), 2200);
+    const t = setTimeout(() => setFlash(false), 1200);
     return () => clearTimeout(t);
   }, [lastAddedAt]);
 
